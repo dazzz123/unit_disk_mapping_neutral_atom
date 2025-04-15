@@ -1,7 +1,9 @@
-subprocess.run(["julia", "mapping.jl"])
+subprocess.run(["/Applications/Julia-1.11.app/Contents/Resources/julia/bin/julia", "mapping.jl"])
 
 with open("julia_output.json", "r") as f:
     julia_data = json.load(f)
+
+
 
 # Use Braket SDK Cost Tracking to estimate the cost to run this example
 from braket.tracking import Tracker
@@ -40,8 +42,8 @@ import numpy as np
 
 
 # Process matches
-coordinates = [(int(x), int(y)) for x, y, _ in julia_data['loc']]
-weights = [float(weight) for _, _, weight in julia_data['weights']]
+coordinates = [tuple(entry["loc"]) for entry in julia_data]
+weights = [entry["weight"] for entry in julia_data]
 
 # Output results
 print("Coordinates:", coordinates)
@@ -210,4 +212,4 @@ plt.colorbar(label='Weights')
 plt.legend()
 plt.show()
 
-subprocess.run(["julia", "julia_part2.jl"])
+subprocess.run(["/Applications/Julia-1.11.app/Contents/Resources/julia/bin/julia", "answer.jl"])
